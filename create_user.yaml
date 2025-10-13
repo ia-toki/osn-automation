@@ -1,0 +1,103 @@
+---
+- name: Remove existing user
+  hosts: peserta
+  vars:
+    username: peserta
+
+  tasks:
+    - name: Kill process
+      become: true
+      ansible.builtin.shell: "pkill -9 -u {{ username }}"
+      ignore_errors: true
+
+    - name: Remove previous user
+      become: true
+      notify: Restart gdm
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: absent
+        remove: true
+
+  handlers:
+    - name: Restart gdm
+      become: true
+      tags: always
+      ansible.builtin.service:
+        name: gdm
+        state: restarted
+
+- name: Create a user user visible in GNOME login
+  hosts: peserta
+  vars:
+    username: peserta-hari-1
+    user_plain_password: peserta
+    launcher_favorites: "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'firefox_firefox.desktop', 'code.desktop', 'geany.desktop', 'org.gnome.Calculator.desktop', 'libreoffice-calc.desktop', 'org.gnome.Terminal.desktop']"
+
+  tasks:
+    - name: Create user with hashed password
+      become: true
+      notify: Restart gdm
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: present
+        shell: "/bin/bash"
+        home: "/home/{{ username }}"
+        create_home: true
+        password: "{{ user_plain_password | password_hash('sha512') }}"
+
+    - name: Create directory for basic config
+      become: true
+      become_user: "{{ username }}"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      with_items:
+        - "/home/{{ username }}/.config"
+        - "/home/{{ username }}/.config/autostart"
+        - "/home/{{ username }}/.config/google-chrome"
+        - "/home/{{ username }}/.config/google-chrome/Default"
+        - "/home/{{ username }}/.config/Code/User"
+
+    - name: Add basic config
+      become: true
+      become_user: "{{ username }}"
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: "0664"
+      with_items:
+        - src: chrome-firstrun-done
+          dest: "/home/{{ username }}/.config/google-chrome/First Run"
+        - src: chrome-bookmarks.json
+          dest: "/home/{{ username }}/.config/google-chrome/Default/Bookmarks"
+        - src: chrome-autostart.desktop
+          dest: "/home/{{ username }}/.config/autostart/browser.desktop"
+        - src: gnome-initial-setup-done
+          dest: "/home/{{ username }}/.config/gnome-initial-setup-done"
+        - src: vscode-settings.json
+          dest: "/home/{{ username }}/.config/Code/User/settings.json"
+
+    # - name: Setup favorite apps in dock
+    #   become: true
+    #   become_user: "{{ username }}"
+    #   community.general.dconf:
+    #     key: "/org/gnome/shell/favorite-apps"
+    #     value: "{{ launcher_favorites }}"
+    #     state: present
+
+    - name: Setup favorite apps in dock (workaround)
+      become: true
+      become_user: "{{ username }}"
+      ansible.builtin.lineinfile:
+        path: "/home/{{ username }}/.profile"
+        regexp: "^gsettings set org.gnome.shell favorite-apps"
+        line: 'gsettings set org.gnome.shell favorite-apps "{{ launcher_favorites }}"'
+
+  handlers:
+    - name: Restart gdm
+      become: true
+      tags: always
+      ansible.builtin.service:
+        name: gdm
+        state: restarted

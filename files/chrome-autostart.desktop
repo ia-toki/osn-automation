@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=OSN Browser
+Exec=google-chrome https://osn-2025-umm.toki.id/
+X-GNOME-Autostart-enabled=true

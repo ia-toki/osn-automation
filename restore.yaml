@@ -1,0 +1,52 @@
+---
+- name: Adhoc
+  hosts: peserta
+  vars:
+    username: peserta-hari-2
+    dest_dir: /home/osn/Desktop/Ansible/history
+
+  tasks:
+    - name: Fetch bash_history
+      become: yes
+      become_user: "{{ username }}"
+      ansible.builtin.fetch:
+        src: "/home/{{ username }}/.bash_history"
+        dest: "{{ dest_dir }}/{{ ansible_host }}.bash_history"
+        flat: true
+        fail_on_missing: false
+
+- name: Remove existing user and show osn
+  hosts: peserta
+  vars:
+    username: peserta-hari-2
+    superadmin: osn
+
+  tasks:
+    - name: Kill process
+      become: true
+      ansible.builtin.shell: "pkill -9 -u {{ username }}"
+      ignore_errors: true
+
+    - name: Remove previous user
+      become: true
+      notify: Restart gdm
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: absent
+        remove: true
+
+    - name: Show osn from gnome login
+      become: yes
+      notify: Restart gdm
+      lineinfile:
+        path: "/var/lib/AccountsService/users/{{ superadmin }}"
+        regexp: "^SystemAccount"
+        line: "SystemAccount=false"
+
+  handlers:
+    - name: Restart gdm
+      become: true
+      tags: always
+      ansible.builtin.service:
+        name: gdm
+        state: restarted

@@ -1,0 +1,51 @@
+---
+- name: Workstation hardening
+  hosts: peserta
+  tasks:
+    - name: Authorized control pubkey
+      ansible.posix.authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ lookup('file', '/home/osn/Desktop/Ansible/id_ansible.pub') }}" # TODO(AVM-Martin): check lookup
+
+    - name: Only allow ssh by pubkey
+      become: true
+      notify: Restart ssh-server
+      ansible.builtin.lineinfile:
+        path: "/etc/ssh/sshd_config"
+        regexp: '^\s*{{ item.key }}\b'
+        line: "{{ item.key }} {{ item.value }}"
+      with_items:
+        - key: "PubkeyAuthentication"
+          value: "yes"
+        - key: "PasswordAuthentication"
+          value: "no"
+
+  handlers:
+    - name: Restart ssh-server
+      become: true
+      tags: always
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
+
+- name: Hide superadmin
+  hosts: peserta
+  vars:
+    superadmin: osn
+
+  tasks:
+    - name: Remove superadmin user from gnome login
+      become: true
+      notify: Restart gdm
+      ansible.builtin.lineinfile:
+        path: "/var/lib/AccountsService/users/{{ superaadmin }}"
+        regexp: "^SystemAccount=false$"
+        line: "SystemAccount=true"
+
+  handlers:
+    - name: Restart gdm
+      become: true
+      tags: always
+      ansible.builtin.service:
+        name: gdm
+        state: restarted
