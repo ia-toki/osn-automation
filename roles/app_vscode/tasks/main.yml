@@ -1,0 +1,14 @@
+---
+- name: Distribute default settings
+  block:
+    - name: Create parent directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config/Code/User/"
+        state: directory
+        mode: "0755"
+
+    - name: Distribute default settings
+      ansible.builtin.copy:
+        src: "{{ app_vscode_settings_file }}"
+        dest: "{{ ansible_facts['env']['HOME'] }}/.config/Code/User/settings.json"
+        mode: "0644"

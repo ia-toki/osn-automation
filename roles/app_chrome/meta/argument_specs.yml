@@ -1,0 +1,11 @@
+---
+argument_specs:
+  main:
+    options:
+      app_chrome_bookmarks_file:
+        type: str
+        default: ""
+
+      app_chrome_autostart_url:
+        type: str
+        default: ""
