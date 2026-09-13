@@ -1,0 +1,11 @@
+---
+- name: Create user with hashed password
+  become: true
+  notify: Restart gdm
+  ansible.builtin.user:
+    name: "{{ usermgmt_username }}"
+    state: present
+    shell: "/bin/bash"
+    home: "/home/{{ usermgmt_username }}"
+    create_home: true
+    password: "{{ usermgmt_password }}"

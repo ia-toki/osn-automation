@@ -1,0 +1,4 @@
+---
+- name: Manage user
+  ansible.builtin.include_tasks:
+    file: "action-{{ usermgmt_action }}.yml"
