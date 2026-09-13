@@ -1,0 +1,7 @@
+---
+argument_specs:
+  main:
+    options:
+      app_vscode_settings_file:
+        type: str
+        default: "settings.json"
