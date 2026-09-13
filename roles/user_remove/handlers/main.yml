@@ -1,7 +1,0 @@
----
-- name: Restart gdm
-  become: true
-  tags: always
-  ansible.builtin.service:
-    name: gdm
-    state: restarted

@@ -3,6 +3,6 @@
   become: true
   notify: Restart gdm
   ansible.builtin.lineinfile:
-    path: "/var/lib/AccountsService/users/{{ username }}"
+    path: "/var/lib/AccountsService/users/{{ usermgmt_username }}"
     regexp: "^SystemAccount"
     line: "SystemAccount=true"

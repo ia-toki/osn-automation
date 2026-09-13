@@ -1,0 +1,20 @@
+---
+argument_specs:
+  main:
+    options:
+      usermgmt_username:
+        type: str
+        required: true
+
+      usermgmt_password:
+        type: str
+        default: "{{ '' | password_hash('sha512', 'osnAutomation') }}"
+
+      usermgmt_action:
+        type: str
+        required: true
+        choices:
+          - create
+          - delete
+          - show
+          - hide

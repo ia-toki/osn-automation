@@ -1,7 +1,0 @@
----
-argument_specs:
-  main:
-    options:
-      username:
-        type: str
-        required: true

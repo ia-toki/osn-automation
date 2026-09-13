@@ -1,0 +1,5 @@
+---
+# usermgmt_username: ""
+usermgmt_password: "{{ '' | password_hash('sha512', 'osnAutomation') }}"
+
+# usermgmt_action: ""
