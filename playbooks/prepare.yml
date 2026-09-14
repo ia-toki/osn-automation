@@ -37,6 +37,13 @@
       role: app_vscode
 
   tasks:
+    - name: Install geany
+      become: true
+      become_user: root
+      ansible.builtin.package:
+        name: geany
+        state: present
+
     # - name: Setup favorite apps in dock
     #   become: true
     #   become_user: "{{ username }}"
