@@ -1,5 +1,5 @@
 ---
-app_vscode_install: false
+app_vscode_force_install: false
 app_vscode_version: "1.137.0"
 app_vscode_source: "https://update.code.visualstudio.com/{{ app_vscode_version }}/linux-deb-x64/stable"
 app_vscode_local_file: "{{ playbook_dir }}/downloaded/vscode-{{ app_vscode_version }}.deb"

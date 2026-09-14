@@ -2,7 +2,7 @@
 argument_specs:
   main:
     options:
-      app_vscode_install:
+      app_vscode_force_install:
         type: bool
         default: false
       app_vscode_version:
