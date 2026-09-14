@@ -9,6 +9,7 @@
 - name: Force kill process by user
   when: usermgmt_delete_existence.state | default('') == 'present'
   become: true
+  become_user: root
   ansible.builtin.command:
     cmd: "pkill -9 -u {{ usermgmt_username }}"
   register: usermgmt_delete_pkill
@@ -18,6 +19,7 @@
 
 - name: Remove user
   become: true
+  become_user: root
   notify: Restart gdm
   ansible.builtin.user:
     name: "{{ usermgmt_username }}"

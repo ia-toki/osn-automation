@@ -1,6 +1,7 @@
 ---
 - name: Hide user from GNOME login
   become: true
+  become_user: root
   notify: Restart gdm
   ansible.builtin.lineinfile:
     path: "/var/lib/AccountsService/users/{{ usermgmt_username }}"

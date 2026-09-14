@@ -1,6 +1,7 @@
 ---
 - name: Restart gdm
   become: true
+  become_user: root
   tags: always
   ansible.builtin.service:
     name: gdm
