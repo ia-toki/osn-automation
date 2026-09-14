@@ -1,3 +1,5 @@
 /ansible.cfg
 /hosts.ini
 /vars.yml
+
+/playbooks/downloaded/
