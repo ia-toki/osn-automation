@@ -1,0 +1,33 @@
+---
+- name: "Download google-chrome-stable"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  ansible.builtin.get_url:
+    url: "{{ app_chrome_source }}"
+    dest: "{{ app_chrome_local_file }}"
+    mode: "0644"
+
+- name: Create package directory
+  become: true
+  become_user: root
+  ansible.builtin.file:
+    path: /opt/package
+    owner: root
+    group: root
+    state: directory
+    mode: "0755"
+
+- name: Copy google-chrome-stable.deb
+  become: true
+  become_user: root
+  ansible.builtin.copy:
+    src: "{{ app_chrome_local_file }}"
+    dest: "/opt/package/google-chrome-stable.deb"
+    mode: "0644"
+
+- name: Install google-chrome-stable
+  become: true
+  become_user: root
+  ansible.builtin.apt:
+    deb: "/opt/package/google-chrome-stable.deb"
