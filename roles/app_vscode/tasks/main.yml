@@ -1,4 +1,9 @@
 ---
+- name: Install vscode
+  when: app_vscode_install
+  ansible.builtin.include_tasks:
+    file: install.yml
+
 - name: Distribute default settings
   block:
     - name: Create parent directory
