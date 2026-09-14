@@ -49,4 +49,4 @@
       ansible.builtin.lineinfile:
         path: "{{ ansible_facts['env']['HOME'] }}/.profile"
         regexp: "^gsettings set org.gnome.shell favorite-apps"
-        line: 'gsettings set org.gnome.shell favorite-apps "{{ launcher_favorites }}"'
+        line: gsettings set org.gnome.shell favorite-apps "{{ launcher_favorites }}"
