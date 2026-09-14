@@ -1,4 +1,13 @@
 ---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Install vscode
+  when: "app_vscode_force_install or 'code' not in ansible_facts.packages"
+  ansible.builtin.include_tasks:
+    file: install.yml
+
 - name: Distribute default settings
   block:
     - name: Create parent directory

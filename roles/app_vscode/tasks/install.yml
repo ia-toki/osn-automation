@@ -1,0 +1,33 @@
+---
+- name: "Download vscode {{ app_vscode_version }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  ansible.builtin.get_url:
+    url: "{{ app_vscode_source }}"
+    dest: "{{ app_vscode_local_file }}"
+    mode: "0644"
+
+- name: Create package directory
+  become: true
+  become_user: root
+  ansible.builtin.file:
+    path: /opt/package
+    owner: root
+    group: root
+    state: directory
+    mode: "0755"
+
+- name: Copy vscode.deb
+  become: true
+  become_user: root
+  ansible.builtin.copy:
+    src: "{{ app_vscode_local_file }}"
+    dest: "/opt/package/vscode-{{ app_vscode_version }}.deb"
+    mode: "0644"
+
+- name: Install vscode
+  become: true
+  become_user: root
+  ansible.builtin.apt:
+    deb: "/opt/package/vscode-{{ app_vscode_version }}.deb"
