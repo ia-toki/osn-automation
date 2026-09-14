@@ -1,4 +1,13 @@
 ---
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: Install chrome
+  when: "app_chrome_force_install or 'google-chrome-stable' not in ansible_facts.packages"
+  ansible.builtin.include_tasks:
+    file: install.yml
+
 - name: Mark setup as done
   block:
     - name: Create parent directory
