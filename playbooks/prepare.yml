@@ -1,0 +1,52 @@
+---
+- name: Prepare contestant user
+  hosts: contestants
+  roles:
+    - name: Hide superadmin user from gnome login
+      role: usermgmt
+      vars:
+        usermgmt_action: hide
+        usermgmt_username: "{{ ansible_user }}"
+
+    - name: Create user for contestant
+      role: usermgmt
+      vars:
+        usermgmt_action: create
+        usermgmt_username: "{{ contestant_username }}"
+        usermgmt_password: "{{ contestant_password | password_hash('sha512', password_salt) }}"
+
+- name: Setup contestant workstation
+  hosts: contestants
+  become: true
+  become_user: "{{ contestant_username }}"
+  pre_tasks:
+    - name: Mark GNOME setup as done
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config/gnome-initial-setup-done"
+        line: "yes"
+        mode: "0644"
+        create: true
+
+  roles:
+    - name: Configure google chrome
+      role: app_chrome
+      vars:
+        app_chrome_autostart_url: "{{ contest_platform_url }}"
+
+    - name: Configure vscode
+      role: app_vscode
+
+  tasks:
+    # - name: Setup favorite apps in dock
+    #   become: true
+    #   become_user: "{{ username }}"
+    #   community.general.dconf:
+    #     key: "/org/gnome/shell/favorite-apps"
+    #     value: "{{ launcher_favorites }}"
+    #     state: present
+
+    - name: Setup favorite apps in dock (workaround)
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_facts['env']['HOME'] }}/.profile"
+        regexp: "^gsettings set org.gnome.shell favorite-apps"
+        line: 'gsettings set org.gnome.shell favorite-apps "{{ launcher_favorites }}"'

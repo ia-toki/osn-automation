@@ -1,0 +1,28 @@
+---
+- name: Archive contestant workstation
+  hosts: contestants
+  become: true
+  become_user: "{{ contestant_username }}"
+  tasks:
+    # TODO: not idempotent, and refactor as roles/takeout
+    - name: Fetch bash_history
+      ansible.builtin.fetch:
+        src: "{{ ansible_facts['env']['HOME'] }}/.bash_history"
+        dest: "{{ playbook_dir }}/takeout/{{ ansible_host }}.bash_history"
+        flat: true
+        fail_on_missing: false
+
+- name: Cleanup contestant user
+  hosts: contestants
+  roles:
+    - name: Remove user for contestant
+      role: usermgmt
+      vars:
+        usermgmt_action: delete
+        usermgmt_username: "{{ contestant_username }}"
+
+    - name: Show superadmin user from gnome login
+      role: usermgmt
+      vars:
+        usermgmt_action: show
+        usermgmt_username: "{{ ansible_user }}"

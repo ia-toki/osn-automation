@@ -1,0 +1,11 @@
+---
+password_salt: "osnAutomation"
+
+contestant_username: "peserta"
+contestant_password: "peserta"
+
+contest_platform_url: "https://tlx.toki.id/"
+launcher_favorites: "['org.gnome.Nautilus.desktop', 'google-chrome.desktop', 'org.gnome.Terminal.desktop']"
+
+# app_chrome_bookmarks_file: ""
+# app_vscode_settings_file: "settings.json"
