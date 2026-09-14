@@ -1,0 +1,26 @@
+---
+- name: "Download cppreference {{ cppreference_version }}"
+  become: false
+  delegate_to: localhost
+  run_once: true
+  ansible.builtin.get_url:
+    url: "{{ cppreference_source }}"
+    dest: "{{ cppreference_local_file }}"
+    mode: "0644"
+
+- name: Create cppreference directory
+  become: true
+  become_user: root
+  ansible.builtin.file:
+    path: "{{ cppreference_target_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Extract cppreference archive
+  become: true
+  become_user: root
+  ansible.builtin.unarchive:
+    src: "{{ cppreference_local_file }}"
+    dest: "{{ cppreference_target_dir }}"
+    remote_src: false
+    creates: "{{ cppreference_target_dir }}/cppreference-doxygen-local.tag.xml"
