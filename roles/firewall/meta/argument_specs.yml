@@ -1,0 +1,11 @@
+---
+argument_specs:
+  main:
+    options:
+      firewall_incoming_allowlist:
+        type: list
+        default: []
+
+      firewall_outgoing_allowlist:
+        type: list
+        default: []

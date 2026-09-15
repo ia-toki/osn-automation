@@ -1,0 +1,15 @@
+---
+- name: Install ufw
+  become: true
+  become_user: root
+  tags: package
+  ansible.builtin.package:
+    name: ufw
+    state: present
+
+- name: Configure rules
+  tags: config
+  ansible.builtin.include_tasks:
+    file: rules.yml
+    apply:
+      tags: config
