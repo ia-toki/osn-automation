@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Contest Browser
+Exec=google-chrome {{ contest_platform_url }}
+X-GNOME-Autostart-enabled=true
