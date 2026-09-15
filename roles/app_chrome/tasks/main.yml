@@ -38,18 +38,3 @@
         src: "{{ app_chrome_bookmarks_file }}"
         dest: "{{ ansible_facts['env']['HOME'] }}/.config/google-chrome/Default/Bookmarks"
         mode: "0644"
-
-- name: Setup autostart
-  when: app_chrome_autostart_url != ""
-  block:
-    - name: Create parent directory
-      ansible.builtin.file:
-        path: "{{ ansible_facts['env']['HOME'] }}/.config/autostart"
-        state: directory
-        mode: "0755"
-
-    - name: Setup autostart
-      ansible.builtin.template:
-        src: autostart.desktop
-        dest: "{{ ansible_facts['env']['HOME'] }}/.config/autostart/browser.desktop"
-        mode: "0644"

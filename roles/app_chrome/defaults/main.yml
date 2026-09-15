@@ -4,4 +4,3 @@ app_chrome_source: "https://dl.google.com/linux/direct/google-chrome-stable_curr
 app_chrome_local_file: "{{ playbook_dir }}/downloaded/google-chrome-stable.deb"
 
 app_chrome_bookmarks_file: ""
-app_chrome_autostart_url: ""

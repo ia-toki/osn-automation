@@ -1,0 +1,11 @@
+---
+argument_specs:
+  main:
+    options:
+      app_firefox_config_basedir:
+        type: path
+        default: "{{ ansible_facts['env']['HOME'] }}/snap/firefox/common/.mozilla/firefox"
+
+      app_firefox_bookmarks_file:
+        type: str
+        default: ""
