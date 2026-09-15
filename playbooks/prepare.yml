@@ -15,6 +15,9 @@
         usermgmt_username: "{{ contestant_username }}"
         usermgmt_password: "{{ contestant_password | password_hash('sha512', password_salt) }}"
 
+    - name: Distribute cppreference
+      role: cppreference
+
 - name: Setup contestant workstation
   hosts: contestants
   become: true
