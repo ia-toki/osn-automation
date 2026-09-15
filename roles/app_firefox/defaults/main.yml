@@ -1,0 +1,4 @@
+---
+app_firefox_config_basedir: "{{ ansible_facts['env']['HOME'] }}/snap/firefox/common/.mozilla/firefox"
+
+app_firefox_bookmarks_file: ""
