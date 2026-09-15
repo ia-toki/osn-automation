@@ -1,0 +1,32 @@
+---
+- name: Prepare ufw
+  hosts: contestant
+  tasks:
+    - name: Install ufw
+      ansible.builtin.apt:
+        name: ufw
+        state: present
+        update_cache: true
+      become: true
+
+- name: Lockdown
+  hosts: contestant
+  tasks:
+    - name: Allow outgoing proxy only
+      become: true
+      community.general.ufw:
+        rule: allow
+        direction: out
+        dest: "{{ item }}"
+      with_items: "{{ firewall_whitelist }}"
+
+    - name: Deny all outgoing traffic
+      become: true
+      community.general.ufw:
+        rule: deny
+        direction: out
+
+    - name: Enable UFW to apply the changes
+      become: true
+      community.general.ufw:
+        state: enabled

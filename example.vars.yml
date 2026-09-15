@@ -8,11 +8,14 @@ contest_platform_url: "https://tlx.toki.id/"
 launcher_favorites:
   - "org.gnome.Nautilus.desktop"
   - "google-chrome.desktop"
+  - "firefox_firefox.desktop"
   - "code.desktop"
   - "geany.desktop"
   - "org.gnome.Calculator.desktop"
   - "libreoffice-calc.desktop"
   - "org.gnome.Terminal.desktop"
+
+firewall_whitelist: []
 
 # app_chrome_bookmarks_file: ""
 # app_chrome_autostart_url: "{{ contest_platform_url }}"

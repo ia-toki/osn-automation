@@ -1,0 +1,31 @@
+---
+- name: SSH Hardening
+  hosts: all
+  tasks:
+    - name: Authorized control pubkey
+      ansible.posix.authorized_key:
+        user: "{{ ansible_user }}"
+        key: "{{ superadmin_pubkey }}"
+
+    - name: Disable password-based authentication
+      become: true
+      notify: Restart ssh-server
+      ansible.builtin.lineinfile:
+        path: "/etc/ssh/sshd_config"
+        regexp: '^\s*{{ item.key }}\b'
+        line: "{{ item.key }} {{ item.value }}"
+      with_items:
+        - key: "PermitRootLogin"
+          value: "prohibit-password"
+        - key: "PubkeyAuthentication"
+          value: "yes"
+        - key: "PasswordAuthentication"
+          value: "no"
+
+  handlers:
+    - name: Restart ssh-server
+      become: true
+      tags: always
+      ansible.builtin.service:
+        name: ssh
+        state: restarted
