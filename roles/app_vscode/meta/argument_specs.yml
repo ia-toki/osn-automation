@@ -11,9 +11,6 @@ argument_specs:
       app_vscode_source:
         type: str
         default: "https://update.code.visualstudio.com/{{ app_vscode_version }}/linux-deb-x64/stable"
-      app_vscode_local_file:
-        type: path
-        default: "{{ playbook_dir }}/downloaded/vscode-{{ app_vscode_version }}.deb"
 
       app_vscode_settings_file:
         type: str

@@ -8,9 +8,6 @@ argument_specs:
       app_chrome_source:
         type: str
         default: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-      app_chrome_local_file:
-        type: path
-        default: "{{ playbook_dir }}/downloaded/google-chrome-stable.deb"
 
       app_chrome_bookmarks_file:
         type: str

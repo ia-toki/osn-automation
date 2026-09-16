@@ -5,14 +5,14 @@
   run_once: true
   ansible.builtin.get_url:
     url: "{{ app_chrome_source }}"
-    dest: "{{ app_chrome_local_file }}"
+    dest: "{{ role_path }}/files/google-chrome-stable.deb"
     mode: "0644"
 
 - name: Create package directory
   become: true
   become_user: root
   ansible.builtin.file:
-    path: /opt/package
+    path: /opt/osn-packages
     owner: root
     group: root
     state: directory
@@ -22,12 +22,12 @@
   become: true
   become_user: root
   ansible.builtin.copy:
-    src: "{{ app_chrome_local_file }}"
-    dest: "/opt/package/google-chrome-stable.deb"
+    src: "google-chrome-stable.deb"
+    dest: "/opt/osn-packages/google-chrome-stable.deb"
     mode: "0644"
 
 - name: Install google-chrome-stable
   become: true
   become_user: root
   ansible.builtin.apt:
-    deb: "/opt/package/google-chrome-stable.deb"
+    deb: "/opt/osn-packages/google-chrome-stable.deb"

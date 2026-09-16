@@ -13,7 +13,3 @@ argument_specs:
       cppreference_source:
         type: str
         default: "https://github.com/PeterFeicht/cppreference-doc/releases/download/v{{ cppreference_version }}/html-book-{{ cppreference_version }}.zip"
-
-      cppreference_local_file:
-        type: path
-        default: "{{ playbook_dir }}/downloaded/cppreference{{ cppreference_version }}.zip"
