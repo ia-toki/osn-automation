@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    options:
+      firewall_incoming_allowlist:
+        type: list
+        elements: str
+        required: true
+        description: "A list of IP or CIDR"
+
+      firewall_outgoing_allowlist:
+        type: list
+        elements: str
+        description: "A list of IP or CIDR"
+        default: []
