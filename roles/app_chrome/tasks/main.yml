@@ -1,22 +1,28 @@
 ---
 - name: Gather the package facts
+  tags: package
   ansible.builtin.package_facts:
     manager: auto
 
 - name: Install chrome
   when: "app_chrome_force_install or 'google-chrome-stable' not in ansible_facts.packages"
+  tags: package
   ansible.builtin.include_tasks:
     file: install.yml
+    apply:
+      tags: package
 
 - name: Mark setup as done
   block:
     - name: Create parent directory
+      tags: config
       ansible.builtin.file:
         path: "{{ ansible_facts['env']['HOME'] }}/.config/google-chrome"
         state: directory
         mode: "0755"
 
     - name: Mark setup as done
+      tags: config
       ansible.builtin.file:
         path: "{{ ansible_facts['env']['HOME'] }}/.config/google-chrome/First Run"
         state: touch
@@ -28,12 +34,14 @@
   when: app_chrome_bookmarks_file != ""
   block:
     - name: Create parent directory
+      tags: config
       ansible.builtin.file:
         path: "{{ ansible_facts['env']['HOME'] }}/.config/google-chrome/Default"
         state: directory
         mode: "0755"
 
     - name: Copy bookmarks
+      tags: config
       ansible.builtin.copy:
         src: "{{ app_chrome_bookmarks_file }}"
         dest: "{{ ansible_facts['env']['HOME'] }}/.config/google-chrome/Default/Bookmarks"

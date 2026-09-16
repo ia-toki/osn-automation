@@ -1,22 +1,28 @@
 ---
 - name: Gather the package facts
+  tags: package
   ansible.builtin.package_facts:
     manager: auto
 
 - name: Install vscode
   when: "app_vscode_force_install or 'code' not in ansible_facts.packages"
+  tags: package
   ansible.builtin.include_tasks:
     file: install.yml
+    apply:
+      tags: package
 
 - name: Distribute default settings
   block:
     - name: Create parent directory
+      tags: config
       ansible.builtin.file:
         path: "{{ ansible_facts['env']['HOME'] }}/.config/Code/User/"
         state: directory
         mode: "0755"
 
     - name: Distribute default settings
+      tags: config
       ansible.builtin.copy:
         src: "{{ app_vscode_settings_file }}"
         dest: "{{ ansible_facts['env']['HOME'] }}/.config/Code/User/settings.json"
