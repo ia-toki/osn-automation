@@ -1,6 +1,6 @@
 ---
 cppreference_version: "20250209"
-cppreference_target_dir: "/opt/cppreference{{ cppreference_version }}"
+cppreference_target_dir: "{{ ansible_facts['env']['HOME'] }}/cppreference{{ cppreference_version }}"
 
 cppreference_source: "https://github.com/PeterFeicht/cppreference-doc/releases/download/v{{ cppreference_version }}/html-book-{{ cppreference_version }}.zip"
 cppreference_local_file: "{{ playbook_dir }}/downloaded/cppreference{{ cppreference_version }}.zip"
