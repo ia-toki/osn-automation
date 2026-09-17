@@ -1,6 +1,6 @@
 ---
 app_chrome_force_install: false
+# app_chrome_version: "1.137.0" # TODO: find how to install specific chrome version
 app_chrome_source: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-app_chrome_local_file: "{{ playbook_dir }}/downloaded/google-chrome-stable.deb"
 
 app_chrome_bookmarks_file: ""
