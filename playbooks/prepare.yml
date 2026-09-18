@@ -45,6 +45,12 @@
         name: geany
         state: present
 
+    - name: Copy bookmarks
+      ansible.builtin.copy:
+        src: "prefs.js"
+        dest: "{{ ansible_facts['env']['HOME'] }}/snap/firefox/common/.mozilla/firefox/osnprofile.default/prefs.js"
+        mode: "0644"
+
     # - name: Setup favorite apps in dock
     #   become: true
     #   become_user: "{{ username }}"

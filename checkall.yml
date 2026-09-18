@@ -9,8 +9,21 @@
     - name: Whoami osn
       ansible.builtin.command:
         cmd: whoami
+      changed_when: false
+
     - name: Whoami root
       become: true
       become_user: root
       ansible.builtin.command:
         cmd: whoami
+      changed_when: false
+
+    - name: Get hostname
+      ansible.builtin.command:
+        cmd: hostname
+      register: hostname
+      changed_when: false
+
+    - name: Print
+      ansible.builtin.debug:
+        var: hostname.stdout
