@@ -19,11 +19,13 @@
       changed_when: false
 
     - name: Get hostname
+      tags: hostname
       ansible.builtin.command:
         cmd: hostname
       register: hostname
       changed_when: false
 
     - name: Print
+      tags: hostname
       ansible.builtin.debug:
         var: hostname.stdout

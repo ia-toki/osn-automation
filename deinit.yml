@@ -1,0 +1,9 @@
+---
+- name: Cleanup osn user
+  hosts: contestants
+  roles:
+    - name: Remove user for contestant
+      role: usermgmt
+      vars:
+        usermgmt_action: delete
+        usermgmt_username: osn

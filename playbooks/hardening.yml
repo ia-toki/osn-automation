@@ -20,7 +20,7 @@
         - key: "PubkeyAuthentication"
           value: "yes"
         - key: "PasswordAuthentication"
-          value: "no"
+          value: "yes"
 
   handlers:
     - name: Restart ssh-server

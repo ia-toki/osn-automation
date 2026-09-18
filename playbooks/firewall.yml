@@ -12,11 +12,11 @@
 - name: Lockdown
   hosts: contestants
   pre_tasks:
-    - name: Reset UFW to clear all rules
-      become: true
-      become_user: root
-      community.general.ufw:
-        state: reset
+    # - name: Reset UFW to clear all rules
+    #   become: true
+    #   become_user: root
+    #   community.general.ufw:
+    #     state: reset
 
     - name: Inject /etc/hosts
       become: true
