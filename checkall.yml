@@ -1,0 +1,16 @@
+---
+- name: checkall
+  hosts: checkall
+  pre_tasks:
+    - name: Ping
+      ansible.builtin.ping:
+
+  tasks:
+    - name: Whoami osn
+      ansible.builtin.command:
+        cmd: whoami
+    - name: Whoami root
+      become: true
+      become_user: root
+      ansible.builtin.command:
+        cmd: whoami

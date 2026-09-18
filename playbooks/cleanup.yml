@@ -1,16 +1,30 @@
 ---
-- name: Archive contestant workstation
+- name: Cleanup firewall
   hosts: contestants
   become: true
-  become_user: "{{ contestant_username }}"
+  become_user: root
   tasks:
-    # TODO: not idempotent, and refactor as roles/takeout
-    - name: Fetch bash_history
-      ansible.builtin.fetch:
-        src: "{{ ansible_facts['env']['HOME'] }}/.bash_history"
-        dest: "{{ playbook_dir }}/takeout/{{ ansible_host }}.bash_history"
-        flat: true
-        fail_on_missing: false
+    - name: Reset UFW to clear all rules
+      community.general.ufw:
+        state: reset
+
+    - name: Enable UFW to apply the changes
+      become: true
+      community.general.ufw:
+        state: disabled
+
+# - name: Archive contestant workstation
+#   hosts: contestants
+#   become: true
+#   become_user: "{{ contestant_username }}"
+#   tasks:
+#     # TODO: not idempotent, and refactor as roles/takeout
+#     - name: Fetch bash_history
+#       ansible.builtin.fetch:
+#         src: "{{ ansible_facts['env']['HOME'] }}/.bash_history"
+#         dest: "{{ playbook_dir }}/takeout/{{ ansible_host }}.bash_history"
+#         flat: true
+#         fail_on_missing: false
 
 - name: Cleanup contestant user
   hosts: contestants
@@ -21,8 +35,8 @@
         usermgmt_action: delete
         usermgmt_username: "{{ contestant_username }}"
 
-    - name: Show superadmin user from gnome login
-      role: usermgmt
-      vars:
-        usermgmt_action: show
-        usermgmt_username: "{{ ansible_user }}"
+    # - name: Show superadmin user from gnome login
+    #   role: usermgmt
+    #   vars:
+    #     usermgmt_action: show
+    #     usermgmt_username: "{{ ansible_user }}"

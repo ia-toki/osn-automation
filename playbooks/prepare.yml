@@ -2,21 +2,18 @@
 - name: Prepare contestant user
   hosts: contestants
   roles:
-    - name: Hide superadmin user from gnome login
-      role: usermgmt
-      vars:
-        usermgmt_action: hide
-        usermgmt_username: "{{ ansible_user }}"
+    # - name: Hide superadmin user from gnome login
+    #   role: usermgmt
+    #   vars:
+    #     usermgmt_action: hide
+    #     usermgmt_username: "{{ ansible_user }}"
 
     - name: Create user for contestant
       role: usermgmt
       vars:
         usermgmt_action: create
         usermgmt_username: "{{ contestant_username }}"
-        usermgmt_password: "{{ contestant_password | password_hash('sha512', password_salt) }}"
-
-    - name: Distribute cppreference
-      role: cppreference
+        usermgmt_password: "{{ contestant_password | password_hash('md5', password_salt) }}"
 
 - name: Setup contestant workstation
   hosts: contestants
@@ -31,10 +28,11 @@
         create: true
 
   roles:
-    - name: Configure google chrome
-      role: app_chrome
-      vars:
-        app_chrome_autostart_url: "{{ contest_platform_url }}"
+    - name: Distribute cppreference
+      role: cppreference
+
+    - name: Configure browser
+      role: app_firefox
 
     - name: Configure vscode
       role: app_vscode

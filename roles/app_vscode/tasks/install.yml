@@ -1,12 +1,12 @@
 ---
-- name: "Download vscode {{ app_vscode_version }}"
-  become: false
-  delegate_to: localhost
-  run_once: true
-  ansible.builtin.get_url:
-    url: "{{ app_vscode_source }}"
-    dest: "{{ app_vscode_local_file }}"
-    mode: "0644"
+# - name: "Download vscode {{ app_vscode_version }}"
+#   become: false
+#   delegate_to: localhost
+#   run_once: true
+#   ansible.builtin.get_url:
+#     url: "{{ app_vscode_source }}"
+#     dest: "{{ app_vscode_local_file }}"
+#     mode: "0644"
 
 - name: Create package directory
   become: true

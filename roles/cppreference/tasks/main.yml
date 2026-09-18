@@ -9,16 +9,12 @@
     mode: "0644"
 
 - name: Create cppreference directory
-  become: true
-  become_user: root
   ansible.builtin.file:
     path: "{{ cppreference_target_dir }}"
     state: directory
     mode: "0755"
 
 - name: Extract cppreference archive
-  become: true
-  become_user: root
   ansible.builtin.unarchive:
     src: "{{ cppreference_local_file }}"
     dest: "{{ cppreference_target_dir }}"

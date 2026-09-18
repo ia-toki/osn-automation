@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Contest Browser
+Exec=firefox {{ app_firefox_autostart_url }}
+X-GNOME-Autostart-enabled=true

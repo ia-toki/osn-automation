@@ -1,0 +1,44 @@
+---
+- name: Create default OSN profile
+  block:
+    - name: Create parent directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/{{ app_firefox_config_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Distribute default profiles
+      ansible.builtin.copy:
+        src: profiles.ini
+        dest: "{{ ansible_facts['env']['HOME'] }}/{{ app_firefox_config_dir }}/profiles.ini"
+        mode: "0644"
+
+- name: Copy bookmarks
+  when: app_firefox_bookmarks_file != ""
+  block:
+    - name: Create parent directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/{{ app_firefox_config_dir }}/osnprofile.default"
+        state: directory
+        mode: "0755"
+
+    - name: Copy bookmarks
+      ansible.builtin.copy:
+        src: "{{ app_firefox_bookmarks_file }}"
+        dest: "{{ ansible_facts['env']['HOME'] }}/{{ app_firefox_config_dir }}/osnprofile.default/places.sqlite"
+        mode: "0644"
+
+- name: Setup autostart
+  when: app_firefox_autostart_url != ""
+  block:
+    - name: Create parent directory
+      ansible.builtin.file:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config/autostart"
+        state: directory
+        mode: "0755"
+
+    - name: Setup autostart
+      ansible.builtin.template:
+        src: autostart.desktop
+        dest: "{{ ansible_facts['env']['HOME'] }}/.config/autostart/browser.desktop"
+        mode: "0644"

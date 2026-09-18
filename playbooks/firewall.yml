@@ -1,16 +1,34 @@
 ---
-- name: Prepare ufw
-  hosts: contestant
-  tasks:
-    - name: Install ufw
-      ansible.builtin.apt:
-        name: ufw
-        state: present
-        update_cache: true
-      become: true
+# - name: Prepare ufw
+#   hosts: contestants
+#   tasks:
+#     - name: Install ufw
+#       ansible.builtin.apt:
+#         name: ufw
+#         state: present
+#         update_cache: true
+#       become: true
 
 - name: Lockdown
-  hosts: contestant
+  hosts: contestants
+  pre_tasks:
+    - name: Reset UFW to clear all rules
+      become: true
+      become_user: root
+      community.general.ufw:
+        state: reset
+
+    - name: Inject /etc/hosts
+      become: true
+      become_user: root
+      ansible.builtin.blockinfile:
+        path: /etc/hosts
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+        block: "{{ item.ip }} {{ item.name }}"
+      with_items:
+        - name: "informatika.kemendikdasmen.go.id"
+          ip: "110.239.85.253"
+
   tasks:
     - name: Allow outgoing proxy only
       become: true
@@ -19,6 +37,12 @@
         direction: out
         dest: "{{ item }}"
       with_items: "{{ firewall_whitelist }}"
+
+    - name: Explicitly allow all inbound
+      become: true
+      community.general.ufw:
+        rule: allow
+        direction: in
 
     - name: Deny all outgoing traffic
       become: true

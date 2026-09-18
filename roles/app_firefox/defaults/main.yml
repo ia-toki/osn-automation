@@ -1,0 +1,4 @@
+---
+app_firefox_config_dir: "snap/firefox/common/.mozilla/firefox/"
+app_firefox_bookmarks_file: ""
+app_firefox_autostart_url: ""

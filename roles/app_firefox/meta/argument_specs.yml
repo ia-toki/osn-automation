@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    options:
+      app_firefox_config_dir:
+        type: str
+        default: "snap/firefox/common/.mozilla/firefox/"
+
+      app_firefox_bookmarks_file:
+        type: str
+        default: ""
+
+      app_firefox_autostart_url:
+        type: str
+        default: ""
