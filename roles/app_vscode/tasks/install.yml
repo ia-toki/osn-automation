@@ -1,4 +1,14 @@
 ---
+- name: Install prerequisite packages
+  become: true
+  become_user: root
+  tags: package
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - libasound2t64
+
 - name: "Download vscode {{ app_vscode_version }}"
   become: false
   delegate_to: localhost
