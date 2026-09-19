@@ -8,7 +8,7 @@ argument_specs:
 
       cppreference_target_dir:
         type: path
-        default: "{{ ansible_facts['env']['HOME'] }}/cppreference{{ cppreference_version }}"
+        default: "{{ ansible_facts['env']['HOME'] }}/cppreference-{{ cppreference_version }}"
 
       cppreference_source:
         type: str
