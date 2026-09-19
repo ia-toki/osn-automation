@@ -1,0 +1,28 @@
+---
+# superadmin_pubkey_path: "/path/to/ansible.pub"
+
+contestant_username: "peserta"
+contestant_password: "peserta"
+password_salt: "osnTOKI" # hashtype: md5
+
+contest_platform_url: "https://tlx.toki.id/"
+
+launcher_favorites:
+  - "org.gnome.Nautilus.desktop"
+  - "firefox_firefox.desktop" # or "google-chrome.desktop"
+  - "code.desktop"
+  - "geany.desktop"
+  - "org.gnome.Calculator.desktop"
+  - "libreoffice-calc.desktop"
+  - "org.gnome.Terminal.desktop"
+
+# autostart_list:
+#   - filename: browser
+#     exec: "firefox {{ contest_platform_url }}"
+
+# incoming_allowlist:
+#   - ip: "127.0.0.1"
+
+outgoing_allowlist:
+  - hostname: "tlx.toki.id"
+    ip: "192.168.0.1"

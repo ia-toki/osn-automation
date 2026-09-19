@@ -1,0 +1,111 @@
+---
+- name: Prepare contestant user
+  hosts: contestants
+  roles:
+    - name: Create user for contestant
+      role: usermgmt
+      vars:
+        usermgmt_action: create
+        usermgmt_username: "{{ contestant_username }}"
+        usermgmt_password: "{{ contestant_password | password_hash('md5', password_salt) }}"
+
+  tasks:
+    - name: Ensure all contest-related packages are installed
+      become: true
+      become_user: root
+      tags: package
+      ansible.builtin.package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        # compilers and debuggers
+        - gcc
+        - g++
+        - gdb
+        # additional apps
+        - geany
+        - libreoffice
+
+- name: Setup contestant workstation
+  hosts: contestants
+  become: true
+  become_user: "{{ contestant_username }}"
+  roles:
+    - name: Configure browser
+      role: app_firefox
+
+    - name: Configure vscode
+      role: app_vscode
+
+    - name: Distribute cppreference
+      role: cppreference
+
+  tasks:
+    - name: Mark GNOME setup as done
+      tags: config
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_facts['env']['HOME'] }}/.config/gnome-initial-setup-done"
+        line: "yes"
+        mode: "0644"
+        create: true
+
+    - name: Setup autostart
+      block:
+        - name: Create parent directory
+          tags: config
+          ansible.builtin.file:
+            path: "{{ ansible_facts['env']['HOME'] }}/.config/autostart"
+            state: directory
+            mode: "0755"
+
+        - name: Setup autostart
+          tags: config
+          ansible.builtin.template:
+            src: autostart.desktop
+            dest: "{{ ansible_facts['env']['HOME'] }}/.config/autostart/{{ autostart.filename }}.desktop"
+            mode: "0644"
+          with_items: "{{ autostart_list | default([]) }}"
+          loop_control:
+            loop_var: autostart
+
+    # - name: Setup favorite apps in dock
+    #   become: true
+    #   become_user: "{{ username }}"
+    #   community.general.dconf:
+    #     key: "/org/gnome/shell/favorite-apps"
+    #     value: "{{ launcher_favorites }}"
+    #     state: present
+
+    - name: Setup favorite apps in dock (workaround)
+      tags: config
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_facts['env']['HOME'] }}/.profile"
+        regexp: "^gsettings set org.gnome.shell favorite-apps"
+        line: gsettings set org.gnome.shell favorite-apps "{{ launcher_favorites }}"
+
+- name: Lockdown
+  hosts: contestants
+  become: true
+  become_user: root
+  pre_tasks:
+    - name: Inject /etc/hosts
+      ansible.builtin.blockinfile:
+        path: /etc/hosts
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.hostname }}"
+        block: "{{ item.ip }} {{ item.hostname }}"
+      with_items: "{{ outgoing_allowlist | default([]) }}"
+
+    - name: Reset firewall
+      when: false # TODO: backup current rules instead
+      tags:
+        - config
+        - firewall
+      community.general.ufw:
+        state: reset
+
+  roles:
+    - name: Configure firewall
+      role: firewall
+      vars:
+        firewall_incoming_allowlist: "{{ incoming_allowlist | map(attribute='ip') | list }}"
+        firewall_outgoing_allowlist: "{{ outgoing_allowlist | map(attribute='ip') | list }}"
