@@ -7,9 +7,59 @@
     name: ufw
     state: present
 
-- name: Configure rules
-  tags: config
-  ansible.builtin.include_tasks:
-    file: rules.yml
-    apply:
-      tags: config
+- name: Configure incoming traffic
+  block:
+    - name: Allow specific incoming traffic
+      become: true
+      become_user: root
+      tags:
+        - config
+        - firewall
+      community.general.ufw:
+        rule: allow
+        direction: in
+        src: "{{ item }}"
+      with_items: "{{ firewall_incoming_allowlist }}"
+
+    - name: Deny other incoming traffic
+      become: true
+      become_user: root
+      tags:
+        - config
+        - firewall
+      community.general.ufw:
+        rule: deny
+        direction: in
+
+- name: Configure outgoing traffic
+  block:
+    - name: Allow specific outgoing traffic
+      become: true
+      become_user: root
+      tags:
+        - config
+        - firewall
+      community.general.ufw:
+        rule: allow
+        direction: out
+        dest: "{{ item }}"
+      with_items: "{{ firewall_outgoing_allowlist }}"
+
+    - name: Deny other outgoing traffic
+      become: true
+      become_user: root
+      tags:
+        - config
+        - firewall
+      community.general.ufw:
+        rule: deny
+        direction: out
+
+- name: Enable UFW to apply the changes
+  become: true
+  become_user: root
+  tags:
+    - config
+    - firewall
+  community.general.ufw:
+    state: enabled
