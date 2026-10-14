@@ -1,10 +1,10 @@
 ---
 - name: Create default OSN profile
   block:
-    - name: Create parent directory
+    - name: Create default profiles directory
       tags: config
       ansible.builtin.file:
-        path: "{{ app_firefox_config_basedir }}"
+        path: "{{ app_firefox_config_basedir }}/osnprofile.default"
         state: directory
         mode: "0755"
 
@@ -17,17 +17,15 @@
 
 - name: Copy bookmarks
   when: app_firefox_bookmarks_file != ""
-  block:
-    - name: Create parent directory
-      tags: config
-      ansible.builtin.file:
-        path: "{{ app_firefox_config_basedir }}/osnprofile.default"
-        state: directory
-        mode: "0755"
+  tags: config
+  ansible.builtin.copy:
+    src: "{{ app_firefox_bookmarks_file }}"
+    dest: "{{ app_firefox_config_basedir }}/osnprofile.default/places.sqlite"
+    mode: "0644"
 
-    - name: Copy bookmarks
-      tags: config
-      ansible.builtin.copy:
-        src: "{{ app_firefox_bookmarks_file }}"
-        dest: "{{ app_firefox_config_basedir }}/osnprofile.default/places.sqlite"
-        mode: "0644"
+- name: Copy default user preferences
+  tags: config
+  ansible.builtin.copy:
+    src: "{{ app_firefox_userprefs_file }}"
+    dest: "{{ app_firefox_config_basedir }}/osnprofile.default/user.js"
+    mode: "0644"
