@@ -4,14 +4,12 @@
   become: true
   become_user: root
   tasks:
-    - name: Disable UFW
-      become: true
-      become_user: root
+    - name: Reset firewall # TODO: restore original rules instead
       tags:
         - config
         - firewall
       community.general.ufw:
-        state: disabled
+        state: reset
 
 - name: Archive contestant workstation
   hosts: contestants

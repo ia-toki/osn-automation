@@ -93,10 +93,10 @@
         path: /etc/hosts
         marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.hostname }}"
         block: "{{ item.ip }} {{ item.hostname }}"
-      with_items: "{{ outgoing_allowlist | default([]) }}"
+      with_items: "{{ outgoing_allowlist | default([]) | rejectattr('hostname', 'undefined') | list }}"
 
     - name: Reset firewall
-      when: false # TODO: backup current rules instead
+      when: false # TODO: backup original rules instead
       tags:
         - config
         - firewall
