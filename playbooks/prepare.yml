@@ -13,6 +13,7 @@
     - name: Ensure all contest-related packages are installed
       become: true
       become_user: root
+      # environment: {} # TODO: setup proxy
       tags: package
       ansible.builtin.package:
         name: "{{ item }}"

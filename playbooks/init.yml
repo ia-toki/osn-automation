@@ -28,7 +28,7 @@
     - name: Authorized control pubkey
       ansible.posix.authorized_key:
         user: "{{ ansible_user }}"
-        key: "{{ lookup('file', superadmin_pubkey_path | mandatory) }}"
+        key: "{{ lookup('file', superuser_pubkey_path | mandatory) }}"
 
     - name: Disable password-based authentication
       become: true

@@ -1,5 +1,5 @@
 ---
-# superadmin_pubkey_path: "/path/to/ansible.pub"
+# superuser_pubkey_path: "/path/to/ansible.pub"
 
 contestant_username: "peserta"
 contestant_password: "peserta"
@@ -22,6 +22,7 @@ launcher_favorites:
 
 # incoming_allowlist:
 #   - ip: "127.0.0.1"
+#   - ip: "" # control IP
 
 outgoing_allowlist:
   - hostname: "tlx.toki.id"

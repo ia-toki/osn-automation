@@ -13,11 +13,11 @@
 
 - name: Archive contestant workstation
   hosts: contestants
-  become: true
-  become_user: "{{ contestant_username }}"
   tasks:
     # TODO: not idempotent, and refactor as roles/takeout
     - name: Fetch bash_history
+      become: true
+      become_user: "{{ contestant_username }}"
       tags: takeout
       ansible.builtin.fetch:
         src: "{{ ansible_facts['env']['HOME'] }}/.bash_history"
