@@ -9,3 +9,7 @@ argument_specs:
       app_firefox_bookmarks_file:
         type: str
         default: ""
+
+      app_firefox_userprefs_file:
+        type: path
+        default: "user.js"
